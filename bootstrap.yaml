@@ -1,0 +1,222 @@
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - name: "Ensure iCloud account is logged in"
+      shell:
+        cmd: '/usr/libexec/PlistBuddy -c "print :Accounts:0:AccountID" ~/Library/Preferences/MobileMeAccounts.plist'
+      register: result
+      check_mode: false
+      changed_when: false
+      failed_when: result.rc != 0
+
+    - name: "Check for SSH configuration"
+      stat: path=~/.ssh/config
+      register: ssh_config
+
+    - name: "Fail if no SSH config"
+      fail: msg="Install SSH configuration before bootstrapping"
+      when: not ssh_config.stat.exists
+
+    - name: "Set 24-hour time display"
+      community.general.osx_defaults:
+        domain: .GlobalPreferences
+        key: AppleICUForce24HourTime
+        type: int
+        value: 1
+      notify: Needs Reboot
+
+    - name: "Enable keyboard navigation to focus between controls"
+      community.general.osx_defaults:
+        domain: .GlobalPreferences
+        key: AppleKeyboardUIMode
+        type: int
+        value: 2
+      notify: Needs Reboot
+
+    - name: "Enable Trackpad tap-to-click"
+      community.general.osx_defaults:
+        domain: com.apple.AppleMultitouchTrackpad
+        key: Clicking
+        type: int
+        value: 1
+      notify: Needs Reboot
+
+    - name: "Configure bottom right hot corner to lock screen"
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: wvous-br-corner
+        type: int
+        value: 13
+      notify: Restart Dock
+
+    - name: "Set Dock default size"
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: tilesize
+        type: float
+        value: 16
+      notify: Restart Dock
+      
+    - name: "Set Dock zoom enabled"
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: magnification
+        type: int
+        value: 1
+      notify: Restart Dock
+
+    - name: "Set Dock zoom size"
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: largesize
+        type: float
+        value: 33
+      notify: Restart Dock
+
+    - name: "Check for Homebrew"
+      shell:
+        cmd: 'brew -v'
+      register: result
+      check_mode: false
+      changed_when: false
+      failed_when: result.rc != 0
+
+    - name: "Install 1Password"
+      community.general.homebrew_cask:
+        name: 1password
+        state: present
+
+    - name: "Install Karabiner Elements"
+      community.general.homebrew_cask:
+        name: karabiner-elements
+        state: present
+      register: install_karabiner
+
+    - name: Create Karabiner config directory if it does not exist
+      ansible.builtin.file:
+        path: ~/.config/karabiner
+        state: directory
+        mode: '0755'
+
+    - name: Download Karabiner config file
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/cbw/misc-configs/main/karabiner/karabiner.json
+        dest: ~/.config/karabiner/karabiner.json
+        mode: '0640'
+
+    - name: Start Karabiner Elements
+      shell:
+        cmd: "open -a /Applications/Karabiner-Elements.app"
+      when: install_karabiner.changed
+
+    - name: "Install Google Drive"
+      community.general.homebrew_cask:
+        name: google-drive
+        state: present
+      register: install_gdrive
+
+    - name: Start Google Drive
+      shell:
+        cmd: 'open -a "/Applications/Google Drive.app"'
+      when: install_gdrive.changed
+
+    - name: "Install iTerm2"
+      community.general.homebrew_cask:
+        name: iterm2
+        state: present
+
+    - name: "Install Rectangle"
+      community.general.homebrew_cask:
+        name: rectangle
+        state: present
+      register: install_rectangle
+
+    - name: Start Rectangle
+      shell:
+        cmd: 'open -a /Applications/Rectangle.app'
+      when: install_rectangle.changed
+
+    - name: "Install Discord"
+      community.general.homebrew_cask:
+        name: discord
+        state: present
+
+    - name: "Install Discord"
+      community.general.homebrew_cask:
+        name: sublime-text
+        state: present
+
+    - name: "Install Alfred"
+      community.general.homebrew_cask:
+        name: alfred
+        state: present
+
+    - name: "Install Evernote"
+      community.general.homebrew_cask:
+        name: evernote
+        state: present
+
+    - name: "Install Spotify"
+      community.general.homebrew_cask:
+        name: spotify
+        state: present
+
+    - name: "Install Mac App Store CLI"
+      community.general.homebrew:
+        name: mas
+        state: present
+
+    - name: "Install Twitter"
+      community.general.mas:
+        id: 1482454543
+        state: present
+
+    - name: "Install Home Assistant client"
+      community.general.mas:
+        id: 1099568401
+        state: present
+
+    - name: "Configure the dock"
+      ansible.builtin.include_role:
+        name: feffi.macos-dock
+      vars:
+        macos_dock:
+          reset: true
+          applications:
+            add: [
+              { label: "Self Service", path: "/Applications/Self Service.app", pos: 1 },
+              { label: "iTerm", path: "/Applications/iTerm.app", pos: 2 },
+              { label: "Google Chrome", path: "/Applications/Google Chrome.app", pos: 3 },
+              { label: "Slack", path: "/Applications/Slack.app", pos: 4 },
+              { label: "Mail", path: "~/Applications/Chrome Apps.localized/Gmail.app", pos: 5 },
+              { label: "Calendar", path: "~/Applications/Chrome Apps.localized/Calendar.app", pos: 6 },
+              { label: "Google Meet", path: "~/Applications/Chrome Apps.localized/Google Meet.app", pos: 7 },
+              { label: "Google Meet", path: "/Applications/Sublime Text.app", pos: 8 },
+              { label: "Home Assistant", path: "/Applications/Home Assistant.app", pos: 9 }
+            ]
+            remove: [ ]
+          folder:
+            add: [
+              { label: "Applications", path: "/Applications", view: "list", display: "folder", pos: 1 },
+              { label: "Downloads", path: "~/Downloads", view: "fan", display: "stack", pos: 2 }
+            ]
+            remove: [ ]
+          url:
+            add: [ ]
+            remove: [ ]
+
+#  roles:
+#    - { role: feffi.macos-dock }
+
+  handlers:
+    - name: Needs Reboot
+      pause:
+        seconds: 2
+        prompt: |
+          Some changed settings require a reboot to take effect.
+      delegate_to: localhost
+    
+    - name: Restart Dock
+      shell:
+        cmd: 'killall Dock'

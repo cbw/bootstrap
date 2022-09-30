@@ -1,0 +1,4 @@
+- src: https://github.com/cbw/ansible-macos-dock.git
+  name: feffi.macos-dock
+- src: https://github.com/feffi/ansible-macos-defaults.git
+  name: feffi.macos-defaults
