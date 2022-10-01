@@ -8,7 +8,28 @@
       register: result
       check_mode: false
       changed_when: false
+
+    - name: "Please log into iCloud before continuing"
+      ansible.builtin.pause:
+      when: result.rc != 0
+
+    - name: "Ensure iCloud account is logged in"
+      shell:
+        cmd: '/usr/libexec/PlistBuddy -c "print :Accounts:0:AccountID" ~/Library/Preferences/MobileMeAccounts.plist'
+      register: result
+      check_mode: false
+      changed_when: false
       failed_when: result.rc != 0
+
+
+
+    - name: "Check for SSH configuration"
+      stat: path=~/.ssh/config
+      register: ssh_config
+
+    - name: "Please set up ssh config before continuing"
+      ansible.builtin.pause:
+      when: not ssh_config.stat.exists
 
     - name: "Check for SSH configuration"
       stat: path=~/.ssh/config
@@ -17,6 +38,8 @@
     - name: "Fail if no SSH config"
       fail: msg="Install SSH configuration before bootstrapping"
       when: not ssh_config.stat.exists
+
+
 
     - name: "Set 24-hour time display"
       community.general.osx_defaults:
@@ -223,10 +246,6 @@
             add: [ ]
             remove: [ ]
 
-# op run --env-file="aws.env" -- aws s3 cp s3://cbw-app-data/iterm/com.googlecode.iterm2.plist /
-
-#  roles:
-#    - { role: feffi.macos-dock }
 
     - name: "Check if 1Password is signed in"
       shell:
@@ -235,6 +254,19 @@
       check_mode: false
       changed_when: false
       failed_when: result.rc != 0
+
+    - name: "Please sign in to 1Password before continuing"
+      ansible.builtin.pause:
+      when: result.rc != 0
+
+    - name: "Check if 1Password is signed in"
+      shell:
+        cmd: 'op account get'
+      register: result
+      check_mode: false
+      changed_when: false
+      failed_when: result.rc != 0
+
 
     - name: "Fetch iTerm config"
       shell:
