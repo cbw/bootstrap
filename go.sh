@@ -13,7 +13,7 @@ then
 fi
 
 mkdir -p ~/.bootstrap
-curl -o ~/.bootstrap/bootstrap.sh https://raw.githubusercontent.com/cbw/bootstrap/main/bootstrap.sh
-curl -o ~/.bootstrap/bootstrap.yaml https://raw.githubusercontent.com/cbw/bootstrap/main/bootstrap.yaml
-curl -o ~/.bootstrap/requirements.yaml https://raw.githubusercontent.com/cbw/bootstrap/main/requirements.yaml
+curl -sSLo ~/.bootstrap/bootstrap.sh https://raw.githubusercontent.com/cbw/bootstrap/main/bootstrap.sh
+curl -sSLo ~/.bootstrap/bootstrap.yaml https://raw.githubusercontent.com/cbw/bootstrap/main/bootstrap.yaml
+curl -sSLo ~/.bootstrap/requirements.yaml https://raw.githubusercontent.com/cbw/bootstrap/main/requirements.yaml
 chmod 755 ~/.bootstrap/bootstrap.sh
