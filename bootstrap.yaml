@@ -34,6 +34,14 @@
         value: 2
       notify: Needs Reboot
 
+    - name: "Disable Spotlight hotkey"
+      shell:
+        cmd: '/usr/libexec/PlistBuddy -c "set AppleSymbolicHotKeys:64:enabled false"  ~/Library/Preferences/com.apple.symbolichotkeys.plist'
+      register: result
+      check_mode: false
+      changed_when: false
+      failed_when: result.rc != 0
+
     - name: "Enable Trackpad tap-to-click"
       community.general.osx_defaults:
         domain: com.apple.AppleMultitouchTrackpad
@@ -177,6 +185,15 @@
         id: 1099568401
         state: present
 
+    - name: Install awscli
+      community.general.homebrew:
+        name: awscli
+
+    - name: "Install Spotify"
+      community.general.homebrew_cask:
+        name: 1password-cli
+        state: present
+
     - name: "Configure the dock"
       ansible.builtin.include_role:
         name: feffi.macos-dock
@@ -206,8 +223,51 @@
             add: [ ]
             remove: [ ]
 
+# op run --env-file="aws.env" -- aws s3 cp s3://cbw-app-data/iterm/com.googlecode.iterm2.plist /
+
 #  roles:
 #    - { role: feffi.macos-dock }
+
+    - name: "Check if 1Password is signed in"
+      shell:
+        cmd: 'op account get'
+      register: result
+      check_mode: false
+      changed_when: false
+      failed_when: result.rc != 0
+
+    - name: "Fetch iTerm config"
+      shell:
+        cmd: 'op run --env-file="aws.env" -- aws s3 cp s3://cbw-app-data/iterm/com.googlecode.iterm2.plist ~/Library/Preferences/'
+      register: result
+      check_mode: false
+      changed_when: false
+      failed_when: result.rc != 0
+
+    - name: "Fetch Alfred config"
+      shell:
+        cmd: 'op run --env-file="aws.env" -- aws s3 cp s3://cbw-app-data/alfred/alfred.zip /tmp/'
+      register: result
+      check_mode: false
+      changed_when: false
+      failed_when: result.rc != 0
+
+    - name: "Create Alfred config directory if it does not exist"
+      ansible.builtin.file:
+        path: "~/Library/Application Support/Alfred"
+        state: directory
+        mode: '0700'
+
+    - name: "Extract alfred.zip into ~/Library/Application Support/Alfred"
+      ansible.builtin.unarchive:
+        src: /tmp/alfred.zip
+        dest: "~/Library/Application Support/Alfred"
+        remote_src: yes
+
+    - name: "Remove Alfred config zip file"
+      ansible.builtin.file:
+        path: /tmp/alfred.zip
+        state: absent
 
   handlers:
     - name: Needs Reboot
