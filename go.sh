@@ -17,3 +17,5 @@ curl -sSLo ~/.bootstrap/bootstrap.sh https://raw.githubusercontent.com/cbw/boots
 curl -sSLo ~/.bootstrap/bootstrap.yaml https://raw.githubusercontent.com/cbw/bootstrap/main/bootstrap.yaml
 curl -sSLo ~/.bootstrap/requirements.yaml https://raw.githubusercontent.com/cbw/bootstrap/main/requirements.yaml
 chmod 755 ~/.bootstrap/bootstrap.sh
+
+~/.bootstrap/bootstrap.sh
