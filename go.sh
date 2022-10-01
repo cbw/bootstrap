@@ -16,6 +16,7 @@ mkdir -p ~/.bootstrap
 curl -sSLo ~/.bootstrap/bootstrap.sh https://raw.githubusercontent.com/cbw/bootstrap/main/bootstrap.sh
 curl -sSLo ~/.bootstrap/bootstrap.yaml https://raw.githubusercontent.com/cbw/bootstrap/main/bootstrap.yaml
 curl -sSLo ~/.bootstrap/requirements.yaml https://raw.githubusercontent.com/cbw/bootstrap/main/requirements.yaml
+curl -sSLo ~/.bootstrap/aws.env https://raw.githubusercontent.com/cbw/bootstrap/main/aws.env
 chmod 755 ~/.bootstrap/bootstrap.sh
 
 (cd ~/.bootstrap; ./bootstrap.sh)
