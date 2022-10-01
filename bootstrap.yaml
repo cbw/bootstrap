@@ -173,7 +173,7 @@
         name: discord
         state: present
 
-    - name: "Install Discord"
+    - name: "Install Sublime Text"
       community.general.homebrew_cask:
         name: sublime-text
         state: present
