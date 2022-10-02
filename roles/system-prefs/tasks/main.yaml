@@ -25,9 +25,80 @@
 - name: "Disable Spotlight hotkey"
   shell:
     cmd: '/usr/libexec/PlistBuddy -c "set AppleSymbolicHotKeys:64:enabled false"  ~/Library/Preferences/com.apple.symbolichotkeys.plist'
+  register: spotlight_key_set_result
+  check_mode: false
+  changed_when: spotlight_key_set_result == 0
+
+- name: "Add Spotlight hotkey dict"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "add AppleSymbolicHotKeys:64 dict" ~/Library/Preferences/com.apple.symbolichotkeys.plist'
+  when: spotlight_key_set_result.rc != 0
   register: result
   check_mode: false
-  changed_when: false
+  changed_when: result == 0
+  failed_when: result.rc != 0
+
+- name: "Add Spotlight hotkey enabled bool"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "add AppleSymbolicHotKeys:64:enabled bool false" ~/Library/Preferences/com.apple.symbolichotkeys.plist'
+  when: spotlight_key_set_result.rc != 0
+  register: result
+  check_mode: false
+  changed_when: result == 0
+  failed_when: result.rc != 0
+
+- name: "Add Spotlight hotkey value dict"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "add AppleSymbolicHotKeys:64:value dict" ~/Library/Preferences/com.apple.symbolichotkeys.plist'
+  when: spotlight_key_set_result.rc != 0
+  register: result
+  check_mode: false
+  changed_when: result == 0
+  failed_when: result.rc != 0
+
+- name: "Add Spotlight hotkey value type string"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "add AppleSymbolicHotKeys:64:value:type string standard" ~/Library/Preferences/com.apple.symbolichotkeys.plist'
+  when: spotlight_key_set_result.rc != 0
+  register: result
+  check_mode: false
+  changed_when: result == 0
+  failed_when: result.rc != 0
+
+- name: "Add Spotlight hotkey value parameters array"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "add AppleSymbolicHotKeys:64:value:parameters array" ~/Library/Preferences/com.apple.symbolichotkeys.plist'
+  when: spotlight_key_set_result.rc != 0
+  register: result
+  check_mode: false
+  changed_when: result == 0
+  failed_when: result.rc != 0
+
+- name: "Add Spotlight hotkey value parameters array value 1"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "add AppleSymbolicHotKeys:64:value:parameters:0 integer 65535" ~/Library/Preferences/com.apple.symbolichotkeys.plist'
+  when: spotlight_key_set_result.rc != 0
+  register: result
+  check_mode: false
+  changed_when: result == 0
+  failed_when: result.rc != 0
+
+- name: "Add Spotlight hotkey value parameters array value 2"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "add AppleSymbolicHotKeys:64:value:parameters:0 integer 49" ~/Library/Preferences/com.apple.symbolichotkeys.plist'
+  when: spotlight_key_set_result.rc != 0
+  register: result
+  check_mode: false
+  changed_when: result == 0
+  failed_when: result.rc != 0
+
+- name: "Add Spotlight hotkey value parameters array value 3"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "add AppleSymbolicHotKeys:64:value:parameters:0 integer 1048576" ~/Library/Preferences/com.apple.symbolichotkeys.plist'
+  when: spotlight_key_set_result.rc != 0
+  register: result
+  check_mode: false
+  changed_when: result == 0
   failed_when: result.rc != 0
 
 - name: "Enable Trackpad tap-to-click"
