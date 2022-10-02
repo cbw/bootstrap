@@ -7,6 +7,8 @@ abort() {
   exit 1
 }
 
+working_dir="/tmp/bootstrap-tmp"
+
 echo "Starting bootstrap process..."
 
 if [ -z "${BASH_VERSION:-}" ]
@@ -14,14 +16,21 @@ then
   abort "Bash is required to interpret this script."
 fi
 
-echo "- Creating ~/.bootstrap..."
-mkdir -p ~/.bootstrap
-echo "- Fetching scripts..."
-curl -sSLo ~/.bootstrap/bootstrap.sh https://raw.githubusercontent.com/cbw/bootstrap/main/bootstrap.sh
-curl -sSLo ~/.bootstrap/bootstrap.yaml https://raw.githubusercontent.com/cbw/bootstrap/main/bootstrap.yaml
-curl -sSLo ~/.bootstrap/requirements.yaml https://raw.githubusercontent.com/cbw/bootstrap/main/requirements.yaml
-curl -sSLo ~/.bootstrap/aws.env https://raw.githubusercontent.com/cbw/bootstrap/main/aws.env
-chmod 755 ~/.bootstrap/bootstrap.sh
+if [ -d "$working_dir" ]
+then
+    echo "- Cleaning up from previous run ($working_dir)..."
+    rm -rf $working_dir
+fi
+
+echo "- Creating working directory ($working_dir)..."
+mkdir -p $working_dir
+
+echo "- Fetching bootstrap code..."
+curl -sSLo $working_dir/bootstrap.zip https://github.com/cbw/bootstrap/archive/refs/heads/main.zip
+
+echo "- Unarchiving..."
+
 
 echo "- Executing bootstrap:"
-(cd ~/.bootstrap; ./bootstrap.sh)
+chmod 755 $working_dir/bootstrap-main/bootstrap.sh
+(cd $working_dir/bootstrap_main; ./bootstrap.sh)
