@@ -28,6 +28,7 @@
   register: spotlight_key_set_result
   check_mode: false
   changed_when: spotlight_key_set_result == 0
+  ignore_errors: yes
 
 - name: "Add Spotlight hotkey dict"
   shell:
