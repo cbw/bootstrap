@@ -12,3 +12,8 @@
   shell:
     cmd: 'open -a /Applications/Rectangle.app'
   when: install_rectangle.changed
+
+- name: Start Alfred
+  shell:
+    cmd: 'open -a /Applications/Alfred 5.app'
+  when: install_alfred.changed

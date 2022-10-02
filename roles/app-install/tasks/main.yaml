@@ -60,6 +60,7 @@
   community.general.homebrew_cask:
     name: alfred
     state: present
+  register: install_alfred
 
 - name: "Install Evernote"
   community.general.homebrew_cask:
