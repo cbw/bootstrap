@@ -25,12 +25,17 @@ fi
 echo "- Creating working directory ($working_dir)..."
 mkdir -p $working_dir
 
-echo "- Fetching bootstrap code..."
+echo "- Fetching bootstrap code from GitHub..."
 curl -sSLo $working_dir/bootstrap.zip https://github.com/cbw/bootstrap/archive/refs/heads/main.zip
 
-echo "- Unarchiving..."
+echo "- Unarchiving bootstrap code..."
+unzip $working_dir/bootstrap.zip -d $working_dir >/dev/null 2>/dev/null
 
+if ! [ $? -eq 0 ]; then
+  echo "Failed to unzip bootstrap code :("
+  exit 1
+fi
 
-echo "- Executing bootstrap:"
+echo "- Executing bootstrap process..."
 chmod 755 $working_dir/bootstrap-main/bootstrap.sh
-(cd $working_dir/bootstrap_main; ./bootstrap.sh)
+(cd $working_dir/bootstrap-main; ./bootstrap.sh)
