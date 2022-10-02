@@ -19,8 +19,8 @@
         remove: [ ]
       folder:
         add: [
-          { label: "Applications", path: "/Applications", view: "list", display: "folder", pos: 1 },
-          { label: "Downloads", path: "~/Downloads", view: "fan", display: "stack", pos: 2 }
+          { label: "Applications", path: "/Applications", view: "list", display: "folder", sort: "name", pos: 1 },
+          { label: "Downloads", path: "~/Downloads", view: "fan", display: "stack", sort: "dateadded", pos: 2 }
         ]
         remove: [ ]
       url:
