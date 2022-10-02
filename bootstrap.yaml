@@ -8,6 +8,7 @@
       register: result
       check_mode: false
       changed_when: false
+      ignore_errors: yes
 
     - name: "Please log into iCloud before continuing"
       ansible.builtin.pause:
@@ -47,6 +48,14 @@
         key: AppleICUForce24HourTime
         type: int
         value: 1
+      notify: Needs Reboot
+
+    - name: "Don't automatically rearrange spaces"
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: mru-spaces
+        type: int
+        value: 0
       notify: Needs Reboot
 
     - name: "Enable keyboard navigation to focus between controls"
