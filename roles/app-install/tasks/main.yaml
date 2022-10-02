@@ -71,3 +71,7 @@
     name: spotify
     state: present
 
+- name: "Install Chrome"
+  community.general.homebrew:
+    name: chrome
+    state: present
