@@ -32,7 +32,8 @@ if ! [ -d "/Applications/1Password.app" ]; then
 fi
 
 # Install 1Password CLI if not already installed
-if ! [ -x $(which op) ]; then
+OP_CLI=$(which op)
+if ! [ -x $OP_CLI ]; then
   output_running 'Installing 1Password CLI'
   brew install --cask 1password-cli
 fi
@@ -40,7 +41,7 @@ fi
 # Check to ensure we're logged into 1Password
 until op account get > /dev/null 2> /dev/null
 do
-  output_warning 'Please log into 1Password before continuing'
+  output_warning 'Please log into 1Password and enable the SSH agent before continuing'
   wait_for_enter
 done
 
