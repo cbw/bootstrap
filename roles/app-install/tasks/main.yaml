@@ -72,6 +72,6 @@
     state: present
 
 - name: "Install Chrome"
-  community.general.homebrew:
-    name: chrome
+  community.general.homebrew_cask:
+    name: google-chrome
     state: present
