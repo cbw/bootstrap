@@ -4,7 +4,9 @@ I hate the time it takes me to get a new workstation set up just how I like it, 
 
 This kicks off by running an inception script:
 
-`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/cbw/bootstrap/main/go.sh)"`
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/cbw/bootstrap/main/go.sh)"
+```
 
 which will set up a working directory and download and unarchive the contents of this repoitory. It'll then run bootstrap.sh which installs a couple prerequisites (Homebrew, 1Password, and Ansible), and executes an Ansible playbook that does all of the rest.
 
