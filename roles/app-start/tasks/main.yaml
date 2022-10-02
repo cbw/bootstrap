@@ -1,0 +1,14 @@
+- name: Start Karabiner Elements
+  shell:
+    cmd: "open -a /Applications/Karabiner-Elements.app"
+  when: install_karabiner.changed
+
+- name: Start Google Drive
+  shell:
+    cmd: 'open -a "/Applications/Google Drive.app"'
+  when: install_gdrive.changed
+
+- name: Start Rectangle
+  shell:
+    cmd: 'open -a /Applications/Rectangle.app'
+  when: install_rectangle.changed

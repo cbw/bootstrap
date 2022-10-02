@@ -1,0 +1,94 @@
+# Install prerequisites
+
+- name: Install awscli
+  community.general.homebrew:
+    name: awscli
+
+- name: "Install 1Password CLI"
+  community.general.homebrew_cask:
+    name: 1password-cli
+    state: present
+
+
+# Ensure 1Password is signed in, we'll use that to pull AWS credentials
+
+- name: "Check if 1Password is signed in"
+  shell:
+    cmd: 'op account get'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
+
+
+# iTerm configuration
+
+- name: "Fetch iTerm config"
+  shell:
+    cmd: 'op run --env-file="aws.env" -- aws s3 cp s3://cbw-app-data/iterm/com.googlecode.iterm2.plist ~/Library/Preferences/'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
+
+
+# Alfred configuration
+
+- name: "Fetch Alfred config"
+  shell:
+    cmd: 'op run --env-file="aws.env" -- aws s3 cp s3://cbw-app-data/alfred/alfred.zip /tmp/'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
+
+- name: "Create Alfred config directory if it does not exist"
+  ansible.builtin.file:
+    path: "~/Library/Application Support/Alfred"
+    state: directory
+    mode: '0700'
+
+- name: "Extract alfred.zip into ~/Library/Application Support/Alfred"
+  ansible.builtin.unarchive:
+    src: /tmp/alfred.zip
+    dest: "~/Library/Application Support/Alfred"
+    remote_src: yes
+
+- name: "Remove Alfred config zip file"
+  ansible.builtin.file:
+    path: /tmp/alfred.zip
+    state: absent
+
+
+# Karabiner configuration
+
+- name: Create Karabiner config directory if it does not exist
+  ansible.builtin.file:
+    path: ~/.config/karabiner
+    state: directory
+    mode: '0755'
+
+- name: Download Karabiner config file
+  shell:
+    cmd: 'op run --env-file="aws.env" -- aws s3 cp s3://cbw-app-data/karabiner/karabiner.json ~/.config/karabiner/karabiner.json'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
+
+
+# SSH configuration
+
+- name: Create SSH config directory if it does not exist
+  ansible.builtin.file:
+    path: ~/.ssh
+    state: directory
+    mode: '0700'
+
+- name: Download SSH config file
+  shell:
+    cmd: 'op run --env-file="aws.env" -- aws s3 cp s3://cbw-app-data/ssh/config ~/.ssh/config'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0

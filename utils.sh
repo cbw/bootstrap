@@ -43,6 +43,12 @@ function error {
   exit 1
 }
 
+function wait_for_enter {
+    printf "${CYAN}"
+    read -p "Press [Enter] key to continue..."
+    printf "${COLOR_OFF}"
+}
+
 function banner {
 printf "\n\n"
 printf "${GREEN}                       ____   _____   _                 _       _                   ${COLOR_OFF}\n"

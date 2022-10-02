@@ -1,0 +1,27 @@
+- name: "Ensure iCloud account is logged in"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "print :Accounts:0:AccountID" ~/Library/Preferences/MobileMeAccounts.plist'
+  register: result
+  check_mode: false
+  changed_when: false
+  ignore_errors: yes
+
+- name: "Please log into iCloud before continuing"
+  ansible.builtin.pause:
+  when: result.rc != 0
+
+- name: "Ensure iCloud account is logged in"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "print :Accounts:0:AccountID" ~/Library/Preferences/MobileMeAccounts.plist'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
+
+- name: "Check for Homebrew"
+  shell:
+    cmd: 'brew -v'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0

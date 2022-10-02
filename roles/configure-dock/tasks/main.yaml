@@ -1,0 +1,28 @@
+- name: "Configure the dock"
+  ansible.builtin.include_role:
+    name: feffi.macos-dock
+  vars:
+    macos_dock:
+      reset: true
+      applications:
+        add: [
+          { label: "Self Service", path: "/Applications/Self Service.app", pos: 1 },
+          { label: "iTerm", path: "/Applications/iTerm.app", pos: 2 },
+          { label: "Google Chrome", path: "/Applications/Google Chrome.app", pos: 3 },
+          { label: "Slack", path: "/Applications/Slack.app", pos: 4 },
+          { label: "Mail", path: "~/Applications/Chrome Apps.localized/Gmail.app", pos: 5 },
+          { label: "Calendar", path: "~/Applications/Chrome Apps.localized/Calendar.app", pos: 6 },
+          { label: "Google Meet", path: "~/Applications/Chrome Apps.localized/Google Meet.app", pos: 7 },
+          { label: "Google Meet", path: "/Applications/Sublime Text.app", pos: 8 },
+          { label: "Home Assistant", path: "/Applications/Home Assistant.app", pos: 9 }
+        ]
+        remove: [ ]
+      folder:
+        add: [
+          { label: "Applications", path: "/Applications", view: "list", display: "folder", pos: 1 },
+          { label: "Downloads", path: "~/Downloads", view: "fan", display: "stack", pos: 2 }
+        ]
+        remove: [ ]
+      url:
+        add: [ ]
+        remove: [ ]

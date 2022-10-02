@@ -1,0 +1,71 @@
+- name: "Set 24-hour time display"
+  community.general.osx_defaults:
+    domain: .GlobalPreferences
+    key: AppleICUForce24HourTime
+    type: int
+    value: 1
+  notify: Needs Reboot
+
+- name: "Don't automatically rearrange spaces"
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: mru-spaces
+    type: int
+    value: 0
+  notify: Needs Reboot
+
+- name: "Enable keyboard navigation to focus between controls"
+  community.general.osx_defaults:
+    domain: .GlobalPreferences
+    key: AppleKeyboardUIMode
+    type: int
+    value: 2
+  notify: Needs Reboot
+
+- name: "Disable Spotlight hotkey"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "set AppleSymbolicHotKeys:64:enabled false"  ~/Library/Preferences/com.apple.symbolichotkeys.plist'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
+
+- name: "Enable Trackpad tap-to-click"
+  community.general.osx_defaults:
+    domain: com.apple.AppleMultitouchTrackpad
+    key: Clicking
+    type: int
+    value: 1
+  notify: Needs Reboot
+
+- name: "Configure bottom right hot corner to lock screen"
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: wvous-br-corner
+    type: int
+    value: 13
+  notify: Restart Dock
+
+- name: "Set Dock default size"
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: tilesize
+    type: float
+    value: 16
+  notify: Restart Dock
+  
+- name: "Set Dock zoom enabled"
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: magnification
+    type: int
+    value: 1
+  notify: Restart Dock
+
+- name: "Set Dock zoom size"
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: largesize
+    type: float
+    value: 33
+  notify: Restart Dock

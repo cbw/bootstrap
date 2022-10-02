@@ -1,0 +1,10 @@
+- name: Needs Reboot
+  pause:
+    seconds: 2
+    prompt: |
+      Some changed settings require a reboot to take effect.
+  delegate_to: localhost
+
+- name: Restart Dock
+  shell:
+    cmd: 'killall Dock'

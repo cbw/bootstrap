@@ -1,0 +1,73 @@
+- name: "Install Mac App Store CLI"
+  community.general.homebrew:
+    name: mas
+    state: present
+
+- name: "Install Twitter"
+  community.general.mas:
+    id: 1482454543
+    state: present
+
+- name: "Install Home Assistant client"
+  community.general.mas:
+    id: 1099568401
+    state: present
+
+- name: "Install 1Password"
+  community.general.homebrew_cask:
+    name: 1password
+    state: present
+
+- name: "Install 1Password CLI"
+  community.general.homebrew_cask:
+    name: 1password-cli
+    state: present
+
+- name: "Install Karabiner Elements"
+  community.general.homebrew_cask:
+    name: karabiner-elements
+    state: present
+  register: install_karabiner
+
+- name: "Install Google Drive"
+  community.general.homebrew_cask:
+    name: google-drive
+    state: present
+  register: install_gdrive
+
+- name: "Install iTerm2"
+  community.general.homebrew_cask:
+    name: iterm2
+    state: present
+
+- name: "Install Rectangle"
+  community.general.homebrew_cask:
+    name: rectangle
+    state: present
+  register: install_rectangle
+
+- name: "Install Discord"
+  community.general.homebrew_cask:
+    name: discord
+    state: present
+
+- name: "Install Sublime Text"
+  community.general.homebrew_cask:
+    name: sublime-text
+    state: present
+
+- name: "Install Alfred"
+  community.general.homebrew_cask:
+    name: alfred
+    state: present
+
+- name: "Install Evernote"
+  community.general.homebrew_cask:
+    name: evernote
+    state: present
+
+- name: "Install Spotify"
+  community.general.homebrew_cask:
+    name: spotify
+    state: present
+
