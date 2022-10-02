@@ -32,8 +32,7 @@ if ! [ -d "/Applications/1Password.app" ]; then
 fi
 
 # Install 1Password CLI if not already installed
-OP_CLI=$(which op)
-if ! [ -x $OP_CLI ]; then
+if [ -z $(which op) ] || ! [ -x $(which op) ]; then
   output_running 'Installing 1Password CLI'
   brew install --cask 1password-cli
 fi
