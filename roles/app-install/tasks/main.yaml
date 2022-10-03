@@ -83,3 +83,8 @@
     name: slack
     state: present
   ignore_errors: true
+
+- name: "Install telnet"
+  community.general.homebrew:
+    name: telnet
+    state: present
