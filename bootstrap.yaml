@@ -2,6 +2,16 @@
   connection: local
   become: false
   gather_facts: true
+  vars:
+    all_space_apps:
+      - "com.1password.1password"
+      - "com.googlecode.iterm2"
+      - "com.tinyspeck.slackmacgap"
+      - "io.robbie.homeassistant"
+      - "com.hnc.discord"
+      - "com.microsoft.teams"
+      - "us.zoom.xos"
+      - "com.apple.calculator"
   roles:
    - pre-check
    - system-prefs

@@ -92,3 +92,21 @@
   check_mode: false
   changed_when: false
   failed_when: result.rc != 0
+
+
+# Zoom preferences
+
+- name: "Set Zoom BounceApplicationSetting"
+  community.general.osx_defaults:
+    domain: us.zoom.xos
+    key: BounceApplicationSetting
+    type: int
+    value: 2
+
+- name: "Set Zoom BounceApplicationSetting"
+  community.general.osx_defaults:
+    domain: us.zoom.xos
+    key: "Hotkey Have Shown Tip"
+    type: int
+    value: 1
+
