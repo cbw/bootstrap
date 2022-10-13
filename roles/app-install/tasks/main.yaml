@@ -34,6 +34,7 @@
     name: google-drive
     state: present
   register: install_gdrive
+  when: corporate_machine
 
 - name: "Install iTerm2"
   community.general.homebrew_cask:
@@ -87,4 +88,25 @@
 - name: "Install telnet"
   community.general.homebrew:
     name: telnet
+    state: present
+
+- name: "Private Homebrew tap name"
+  ansible.builtin.set_fact:
+    private_tap_name: "{{ lookup('ansible.builtin.env', 'PRIVATE_BREW_TAP_NAME') }}"
+  when: corporate_machine
+
+- name: "Private Homebrew tap URL"
+  ansible.builtin.set_fact:
+    private_tap_url: "{{ lookup('ansible.builtin.env', 'PRIVATE_BREW_TAP_URL') }}"
+  when: corporate_machine
+
+- name: "Tap private Homebrew repository"
+  homebrew_tap:
+    name: "{{ private_tap_name }}"
+    url: "{{ private_tap_url }}"
+  when: corporate_machine
+
+- name: "Install Auth CLI"
+  community.general.homebrew:
+    name: authcli
     state: present

@@ -1,0 +1,9 @@
+- name: Checking if Duo Device Health is installed
+  stat:
+    path: "/Applications/Duo Device Health.app"
+  register: duo_device_health
+
+- name: Corporate machine if Duo Device Health is installed
+  ansible.builtin.set_fact:
+    corporate_machine: true
+  when: duo_device_health.stat.exists

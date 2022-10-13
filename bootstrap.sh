@@ -48,4 +48,4 @@ output_running "Installing Ansible Galaxy requirements"
 ansible-galaxy install -r requirements.yaml -p roles.galaxy/
 
 output_running "Executing Ansible playbook"
-ansible-playbook -i inventory bootstrap.yaml --connection=local
+op run --env-file="ansible.env" -- ansible-playbook -i inventory bootstrap.yaml --connection=local

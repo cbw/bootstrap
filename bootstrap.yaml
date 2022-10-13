@@ -13,6 +13,7 @@
       - "us.zoom.xos"
       - "com.apple.calculator"
   roles:
+   - derive-environment
    - pre-check
    - system-prefs
    - app-install

@@ -25,3 +25,8 @@
   check_mode: false
   changed_when: false
   failed_when: result.rc != 0
+
+- name: "Prompt to ensure connected to VPN"
+  ansible.builtin.pause:
+    prompt: "Ensure you are connected to VPN, then press [ Enter ]"
+  when: corporate_machine
