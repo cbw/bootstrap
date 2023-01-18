@@ -110,3 +110,4 @@
   community.general.homebrew:
     name: authcli
     state: present
+  when: corporate_machine
