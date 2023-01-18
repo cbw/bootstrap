@@ -28,7 +28,7 @@
   register: spotlight_key_set_result
   check_mode: false
   changed_when: spotlight_key_set_result == 0
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: "Add Spotlight hotkey dict"
   shell:
@@ -159,7 +159,7 @@
   check_mode: false
   changed_when: result == 0
   failed_when: result.rc != 0
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: "Remove any current app:space bindings"
   shell:
@@ -170,7 +170,7 @@
   failed_when: result.rc != 0
   with_items: 
     - "{{ all_space_apps }}"
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: "Bind apps to all spaces"
   shell:
