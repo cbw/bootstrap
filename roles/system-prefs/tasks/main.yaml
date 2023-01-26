@@ -149,6 +149,12 @@
     type: int
     value: 1
 
+- name: "Don't show recent apps in the Dock"
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: show-recents
+    type: bool
+    value: false
 
 # Bind apps to all spaces
 

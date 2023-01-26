@@ -29,13 +29,6 @@
     state: present
   register: install_karabiner
 
-- name: "Install Google Drive"
-  community.general.homebrew_cask:
-    name: google-drive
-    state: present
-  register: install_gdrive
-  when: corporate_machine
-
 - name: "Install iTerm2"
   community.general.homebrew_cask:
     name: iterm2
@@ -90,6 +83,13 @@
     name: telnet
     state: present
 
+- name: "Install Golang"
+  community.general.homebrew:
+    name: golang
+    state: present
+
+# Corporate device-specific software
+
 - name: "Private Homebrew tap name"
   ansible.builtin.set_fact:
     private_tap_name: "{{ lookup('ansible.builtin.env', 'PRIVATE_BREW_TAP_NAME') }}"
@@ -111,3 +111,97 @@
     name: authcli
     state: present
   when: corporate_machine
+
+- name: "Install Google Drive"
+  community.general.homebrew_cask:
+    name: google-drive
+    state: present
+  register: install_gdrive
+  when: corporate_machine
+
+# Personal device-specific software
+
+- name: "Install Adobe Creative Cloud"
+  community.general.homebrew_cask:
+    name: adobe-creative-cloud
+    state: present
+  when: personal_machine
+
+- name: "Install Backblaze"
+  community.general.homebrew_cask:
+    name: backblaze
+    state: present
+  when: personal_machine
+
+- name: "Install DaisyDisk"
+  community.general.homebrew_cask:
+    name: daisydisk
+    state: present
+  when: personal_machine
+
+- name: "Install Dropbox"
+  community.general.homebrew_cask:
+    name: dropbox
+    state: present
+  when: personal_machine
+
+- name: "Install Little Snitch"
+  community.general.homebrew_cask:
+    name: little-snitch
+    state: present
+  when: personal_machine
+
+- name: "Install Messenger"
+  community.general.mas:
+    id: 1480068668
+    state: present
+  when: personal_machine
+
+- name: "Install Microsoft Remote Desktop"
+  community.general.mas:
+    id: 1295203466
+    state: present
+  when: personal_machine
+
+- name: "Install Tailscale"
+  community.general.homebrew_cask:
+    name: tailscale
+    state: present
+  when: personal_machine
+
+- name: "Install Visual Studio Code"
+  community.general.homebrew_cask:
+    name: visual-studio-code
+    state: present
+  when: personal_machine
+
+- name: "Install Zoom"
+  community.general.homebrew_cask:
+    name: zoom
+    state: present
+  when: personal_machine
+
+- name: Tap a Homebrew repository, state present
+  community.general.homebrew_tap:
+    name: "homebrew/homebrew-cask-drivers"
+  when: personal_machine
+
+- name: "Install Sonos controller"
+  community.general.homebrew_cask:
+    name: sonos
+    state: present
+  when: personal_machine
+
+- name: "Install Synology Drive"
+  community.general.homebrew_cask:
+    name: synology-drive
+    state: present
+  when: personal_machine
+
+- name: "Install Balena Etcher"
+  community.general.homebrew_cask:
+    name: balenaetcher
+    state: present
+  when: personal_machine
+
+## TODO: Little Snitch ruleset, VMWare Fusion

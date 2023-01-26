@@ -1,4 +1,4 @@
-- name: "Configure the dock"
+- name: "Configure the dock (Corporate)"
   ansible.builtin.include_role:
     name: feffi.macos-dock
   vars:
@@ -13,7 +13,7 @@
           { label: "Mail", path: "~/Applications/Chrome Apps.localized/Gmail.app", pos: 5 },
           { label: "Calendar", path: "~/Applications/Chrome Apps.localized/Calendar.app", pos: 6 },
           { label: "Google Meet", path: "~/Applications/Chrome Apps.localized/Google Meet.app", pos: 7 },
-          { label: "Google Meet", path: "/Applications/Sublime Text.app", pos: 8 },
+          { label: "Sublime Text", path: "/Applications/Sublime Text.app", pos: 8 },
           { label: "Home Assistant", path: "/Applications/Home Assistant.app", pos: 9 }
         ]
         remove: [ ]
@@ -26,3 +26,37 @@
       url:
         add: [ ]
         remove: [ ]
+  when: corporate_machine
+
+- name: "Configure the dock (Personal)"
+  ansible.builtin.include_role:
+    name: feffi.macos-dock
+  vars:
+    macos_dock:
+      reset: true
+      applications:
+        add: [
+          { label: "iTerm", path: "/Applications/iTerm.app", pos: 1 },
+          { label: "Contacts", path: "/Applications/Contacts.app", pos: 2 },
+          { label: "Safari", path: "/Applications/Safari.app", pos: 3 },
+          { label: "Calendar", path: "/Applications/Calendar.app", pos: 4 },
+          { label: "Messenger", path: "/Applications/Messenger.app", pos: 5 },
+          { label: "Messages", path: "/Applications/Messages.app", pos: 6 },
+          { label: "Spotify", path: "/Applications/Spotify.app", pos: 7 },
+          { label: "Visual Studio Code", path: "/Applications/Visual Studio Code.app", pos: 8 },
+          { label: "Photos", path: "/Applications/Photos.app", pos: 9 },
+          { label: "Discord", path: "/Applications/Discord.app", pos: 10 },
+          { label: "Google Chrome", path: "/Applications/Google Chrome.app", pos: 11 },
+          { label: "Home Assistant", path: "/Applications/Home Assistant.app", pos: 12 }
+        ]
+        remove: [ ]
+      folder:
+        add: [
+          { label: "Applications", path: "/Applications", view: "list", display: "folder", sort: "name", pos: 1 },
+          { label: "Downloads", path: "~/Downloads", view: "fan", display: "stack", sort: "dateadded", pos: 2 }
+        ]
+        remove: [ ]
+      url:
+        add: [ ]
+        remove: [ ]
+  when: personal_machine
