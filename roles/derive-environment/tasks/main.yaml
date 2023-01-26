@@ -6,9 +6,11 @@
 - name: Corporate machine if Duo Device Health is installed
   ansible.builtin.set_fact:
     corporate_machine: true
+    personal_machine: false
   when: duo_device_health.stat.exists
 
 - name: Personal machine if Duo Device Health is installed
   ansible.builtin.set_fact:
     personal_machine: true
+    corporate_machine: false
   when: not duo_device_health.stat.exists
