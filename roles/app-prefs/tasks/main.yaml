@@ -183,3 +183,13 @@
   failed_when: result.rc != 0
   with_items: 
     - "{{ all_space_apps }}"
+
+# gitconfig
+
+- name: Download .gitconfig file
+  shell:
+    cmd: 'op run --env-file="aws.env" -- aws s3 cp s3://cbw-app-data/git/gitconfig ~/.gitconfig'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
