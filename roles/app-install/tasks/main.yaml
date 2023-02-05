@@ -3,6 +3,11 @@
     name: mas
     state: present
 
+- name: "Install 1Password Safari extension"
+  community.general.mas:
+    id: 1569813296
+    state: present
+
 - name: "Install Twitter"
   community.general.mas:
     id: 1482454543
@@ -87,6 +92,37 @@
   community.general.homebrew:
     name: golang
     state: present
+
+- name: "Install jq"
+  community.general.homebrew:
+    name: jq
+    state: present
+
+- name: "Install kubernetes-cli"
+  community.general.homebrew:
+    name: kubernetes-cli
+    state: present
+
+- name: "Install helm"
+  community.general.homebrew:
+    name: helm
+    state: present
+
+- name: "Install fzf"
+  community.general.homebrew:
+    name: fzf
+    state: present
+
+- name: "Install fzf"
+  community.general.homebrew:
+    name: fzf
+    state: present
+
+- name: "Install zsh-syntax-highlighting"
+  community.general.homebrew:
+    name: zsh-syntax-highlighting
+    state: present
+
 
 # Corporate device-specific software
 
@@ -201,6 +237,12 @@
 - name: "Install Balena Etcher"
   community.general.homebrew_cask:
     name: balenaetcher
+    state: present
+  when: personal_machine
+
+- name: "Install Docker"
+  community.general.homebrew_cask:
+    name: docker
     state: present
   when: personal_machine
 

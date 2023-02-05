@@ -10,8 +10,6 @@ banner
 if ! [ -x "$(command -v brew)" ]; then
   output_running 'Homebrew not installed - installing'
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  echo 'PATH="/opt/homebrew/bin:$PATH"' >> ~/.bash_profile
-  echo 'PATH="/opt/homebrew/bin:$PATH"' >> ~/.zshrc
   PATH="/opt/homebrew/bin:$PATH"
 fi
 

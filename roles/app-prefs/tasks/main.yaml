@@ -110,3 +110,76 @@
     type: int
     value: 1
 
+# Shell configuration
+
+- name: Check if ohmyzsh path exists
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/.oh-my-zsh"
+  register: ohmyzsh_path
+
+- name: "Install oh-my-zsh"
+  shell:
+    cmd: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
+  when: not ohmyzsh_path.stat.exists
+
+- name: "Install fzf"
+  shell:
+    cmd: '/opt/homebrew/opt/fzf/install --all'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
+
+- name: "Clone the Powrlevel10k zsh theme"
+  ansible.builtin.git:
+    repo: 'https://github.com/romkatv/powerlevel10k.git'
+    dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/themes/powerlevel10k"
+
+- name: "Clone the zsh autosuggestions"
+  ansible.builtin.git:
+    repo: 'https://github.com/zsh-users/zsh-autosuggestions'
+    dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+
+- name: Download .zshrc file
+  shell:
+    cmd: 'op run --env-file="aws.env" -- aws s3 cp s3://cbw-app-data/zsh/zshrc ~/.zshrc'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
+
+# Bind apps to all spaces
+
+- name: "Add app-bindings dict to com.apple.spaces"
+  shell:
+    cmd: '/usr/libexec/PlistBuddy -c "add app-bindings dict" ~/Library/Preferences/com.apple.spaces.plist'
+  register: result
+  check_mode: false
+  changed_when: result == 0
+  failed_when: result.rc != 0
+  ignore_errors: true
+
+- name: "Remove any current app:space bindings"
+  shell:
+    cmd: "/usr/libexec/PlistBuddy -c 'delete app-bindings:{{ item }}' ~/Library/Preferences/com.apple.spaces.plist"
+  register: result
+  check_mode: false
+  changed_when: result == 0
+  failed_when: result.rc != 0
+  with_items: 
+    - "{{ all_space_apps }}"
+  ignore_errors: true
+
+- name: "Bind apps to all spaces"
+  shell:
+    cmd: "/usr/libexec/PlistBuddy -c 'add app-bindings:{{ item }} string AllSpaces' ~/Library/Preferences/com.apple.spaces.plist"
+  register: result
+  check_mode: false
+  changed_when: result == 0
+  failed_when: result.rc != 0
+  with_items: 
+    - "{{ all_space_apps }}"

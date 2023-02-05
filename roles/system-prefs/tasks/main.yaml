@@ -155,35 +155,3 @@
     key: show-recents
     type: bool
     value: false
-
-# Bind apps to all spaces
-
-- name: "Add app-bindings dict to com.apple.spaces"
-  shell:
-    cmd: '/usr/libexec/PlistBuddy -c "add app-bindings dict" ~/Library/Preferences/com.apple.spaces.plist'
-  register: result
-  check_mode: false
-  changed_when: result == 0
-  failed_when: result.rc != 0
-  ignore_errors: true
-
-- name: "Remove any current app:space bindings"
-  shell:
-    cmd: "/usr/libexec/PlistBuddy -c 'delete app-bindings:{{ item }}' ~/Library/Preferences/com.apple.spaces.plist"
-  register: result
-  check_mode: false
-  changed_when: result == 0
-  failed_when: result.rc != 0
-  with_items: 
-    - "{{ all_space_apps }}"
-  ignore_errors: true
-
-- name: "Bind apps to all spaces"
-  shell:
-    cmd: "/usr/libexec/PlistBuddy -c 'add app-bindings:{{ item }} string AllSpaces' ~/Library/Preferences/com.apple.spaces.plist"
-  register: result
-  check_mode: false
-  changed_when: result == 0
-  failed_when: result.rc != 0
-  with_items: 
-    - "{{ all_space_apps }}"
