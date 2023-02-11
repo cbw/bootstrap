@@ -108,6 +108,11 @@
     name: helm
     state: present
 
+- name: "Install istioctl"
+  community.general.homebrew:
+    name: istioctl
+    state: present
+
 - name: "Install fzf"
   community.general.homebrew:
     name: fzf
@@ -123,6 +128,10 @@
     name: zsh-syntax-highlighting
     state: present
 
+- name: "Install zsh-syntax-highlighting"
+  community.general.homebrew:
+    name: k9s
+    state: present
 
 # Corporate device-specific software
 
@@ -153,6 +162,12 @@
     name: google-drive
     state: present
   register: install_gdrive
+  when: corporate_machine
+
+- name: "Install Google Earth Pro"
+  community.general.homebrew_cask:
+    name: google-earth-pro
+    state: present
   when: corporate_machine
 
 # Personal device-specific software
