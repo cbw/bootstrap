@@ -128,9 +128,23 @@
     name: zsh-syntax-highlighting
     state: present
 
-- name: "Install zsh-syntax-highlighting"
+- name: "Install k9s"
   community.general.homebrew:
     name: k9s
+    state: present
+
+- name: "Install kubectx"
+  community.general.homebrew:
+    name: kubectx
+    state: present
+
+- name: Tap touch2sudo repo
+  community.general.homebrew_tap:
+    name: "prbinu/touch2sudo"
+
+- name: "Install kubectx"
+  community.general.homebrew:
+    name: touch2sudo
     state: present
 
 # Corporate device-specific software

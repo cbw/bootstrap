@@ -193,3 +193,13 @@
   check_mode: false
   changed_when: false
   failed_when: result.rc != 0
+
+# sudo ssh key
+
+- name: Export sudo ssh key
+  shell:
+    cmd: 'op read "op://Personal/e4vagt454kzpjt2h6gjo3tz2ai/private_key" > ~/.ssh/id_rsa_sudo'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
