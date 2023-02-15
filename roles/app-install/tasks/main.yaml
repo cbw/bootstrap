@@ -138,15 +138,6 @@
     name: kubectx
     state: present
 
-- name: Tap touch2sudo repo
-  community.general.homebrew_tap:
-    name: "prbinu/touch2sudo"
-
-- name: "Install kubectx"
-  community.general.homebrew:
-    name: touch2sudo
-    state: present
-
 # Corporate device-specific software
 
 - name: "Private Homebrew tap name"
@@ -278,6 +269,17 @@
 - name: "Install Docker"
   community.general.homebrew_cask:
     name: docker
+    state: present
+  when: personal_machine
+
+- name: Tap touch2sudo repo
+  community.general.homebrew_tap:
+    name: "prbinu/touch2sudo"
+  when: personal_machine
+
+- name: "Install kubectx"
+  community.general.homebrew:
+    name: touch2sudo
     state: present
   when: personal_machine
 
