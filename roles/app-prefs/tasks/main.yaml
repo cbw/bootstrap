@@ -189,6 +189,7 @@
 - name: Download .gitconfig file
   shell:
     cmd: 'op run --env-file="aws.env" -- aws s3 cp s3://cbw-app-data/git/gitconfig ~/.gitconfig'
+  when: personal_machine
   register: result
   check_mode: false
   changed_when: false
@@ -199,7 +200,9 @@
 - name: Export sudo ssh key
   shell:
     cmd: 'op read "op://Personal/e4vagt454kzpjt2h6gjo3tz2ai/private_key" > ~/.ssh/id_rsa_sudo'
+  when: personal_machine
   register: result
   check_mode: false
   changed_when: false
   failed_when: result.rc != 0
+

@@ -184,6 +184,12 @@
     state: present
   when: corporate_machine
 
+- name: "Install Google Cloud SDK"
+  community.general.homebrew_cask:
+    name: google-cloud-sdk
+    state: present
+  when: corporate_machine
+
 # Personal device-specific software
 
 - name: "Install Adobe Creative Cloud"
@@ -274,5 +280,25 @@
     name: docker
     state: present
   when: personal_machine
+
+# Install font for iTerm
+
+- name: Ensure user font directory exists
+  ansible.builtin.file:
+    path: "{{ lookup('env', 'HOME') }}/Library/Fonts"
+    state: directory
+    mode: '0755'
+
+- name: Check if Meslo font is installed
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/Library/Fonts/SourceCodePro for Powerline.ttf"
+  register: meslo_font_path
+
+- name: Download SourceCodePro font
+  ansible.builtin.get_url:
+    url: "https://github.com/Falkor/dotfiles/raw/master/fonts/SourceCodePro%2BPowerline%2BAwesome%2BRegular.ttf"
+    dest: "{{ lookup('env', 'HOME') }}/Library/Fonts/SourceCodePro for Powerline.ttf"
+    checksum: sha256:44f51e4e61b171f070ad792ee61fb11c72e682be91d381b94ad9f314e4a5ba20
+
 
 ## TODO: Little Snitch ruleset, VMWare Fusion
