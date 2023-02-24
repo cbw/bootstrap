@@ -138,6 +138,11 @@
     name: kubectx
     state: present
 
+- name: "Install cloudflared"
+  community.general.homebrew:
+    name: cloudflared
+    state: present
+
 # Corporate device-specific software
 
 - name: "Private Homebrew tap name"
