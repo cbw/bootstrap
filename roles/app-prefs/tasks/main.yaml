@@ -152,6 +152,13 @@
   changed_when: false
   failed_when: result.rc != 0
 
+- name: Touch local config file
+  copy:
+    content: ""
+    dest: ~/.zshrc.local
+    force: false
+    mode: 0400
+
 # Bind apps to all spaces
 
 - name: "Add app-bindings dict to com.apple.spaces"
