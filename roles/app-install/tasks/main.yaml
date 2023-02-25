@@ -143,6 +143,11 @@
     name: cloudflared
     state: present
 
+- name: "Install Velero CLI"
+  community.general.homebrew:
+    name: velero
+    state: present
+
 # Corporate device-specific software
 
 - name: "Private Homebrew tap name"
