@@ -31,6 +31,13 @@
   changed_when: false
   failed_when: result.rc != 0
 
+- name: "Clear iTerm prefs cache"
+  shell:
+    cmd: 'defaults read com.googlecode.iterm2'
+  register: result
+  check_mode: false
+  changed_when: false
+  failed_when: result.rc != 0
 
 # Alfred configuration
 
