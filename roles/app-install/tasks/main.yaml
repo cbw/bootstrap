@@ -160,7 +160,23 @@
     private_tap_url: "{{ lookup('ansible.builtin.env', 'PRIVATE_BREW_TAP_URL') }}"
   when: corporate_machine
 
-- name: "Tap private Homebrew repository"
+- name: "Tap private Homebrew repository 1"
+  homebrew_tap:
+    name: "{{ private_tap_name }}"
+    url: "{{ private_tap_url }}"
+  when: corporate_machine
+
+- name: "Private Homebrew tap name"
+  ansible.builtin.set_fact:
+    private_tap_name: "{{ lookup('ansible.builtin.env', 'PRIVATE_BREW_TAP_NAME_2') }}"
+  when: corporate_machine
+
+- name: "Private Homebrew tap URL"
+  ansible.builtin.set_fact:
+    private_tap_url: "{{ lookup('ansible.builtin.env', 'PRIVATE_BREW_TAP_URL_2') }}"
+  when: corporate_machine
+
+- name: "Tap private Homebrew repository 2"
   homebrew_tap:
     name: "{{ private_tap_name }}"
     url: "{{ private_tap_url }}"
@@ -169,6 +185,12 @@
 - name: "Install Auth CLI"
   community.general.homebrew:
     name: authcli
+    state: present
+  when: corporate_machine
+
+- name: "Install Gwart"
+  community.general.homebrew:
+    name: gwart
     state: present
   when: corporate_machine
 
