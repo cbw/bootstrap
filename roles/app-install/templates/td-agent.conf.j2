@@ -1,0 +1,38 @@
+# {{ ansible_managed }}
+
+<source>
+  @type macoslog
+  style ndjson
+  tag macos
+  pos_file macoslog-last-starttime.log
+  run_interval 10s
+  <parse>
+    @type json
+    time_type string
+    time_key timestamp
+    time_format %Y-%m-%d %H:%M:%S.%L%z
+  </parse>
+</source>
+
+<filter macos>
+  @type record_transformer
+  <record>
+    hostname "#{Socket.gethostname}"
+  </record>
+</filter>
+
+<match macos>
+  @type                 splunk_hec
+  hec_host                  cloud.community.humio.com
+  hec_port                  443
+  hec_token             {{ lookup('ansible.builtin.env', 'HUMIO_MACOS_LOGS_TOKEN') }}
+  #use_ssl               true
+  <buffer>
+    @type               memory
+    flush_mode          interval
+    flush_interval      2
+    flush_thread_count  2
+    overflow_action     block
+    retry_forever       true
+  </buffer>
+</match>

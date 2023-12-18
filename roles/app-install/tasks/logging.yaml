@@ -1,0 +1,61 @@
+#brew install ruby
+#use brew's ruby gem to install fluentd, fluent-plugin-macos-log, fluent-plugin-splunk-hec
+#create config file
+#create launchd file
+#filter down mac logs so they're not so damn noisy
+
+---
+- name: Install Fluentd
+  community.general.homebrew_cask:
+    name: td-agent
+    state: present
+
+- name: Install Fluentd macOS log plugin 
+  gem:
+    name: fluent-plugin-macos-log
+    state: latest
+
+- name: Install Fluentd Splunk plugin 
+  gem:
+    name: fluent-plugin-splunk-hec
+    state: latest
+
+
+- name: Create Fluentd config file
+  ansible.builtin.template:
+    src: td-agent.conf.j2
+    dest: /etc/td-agent/td-agent.conf
+    owner: root
+    group: wheel
+    mode: '0640'
+  register: fluentd_config
+  become: true
+
+- name: Run fluentd
+  community.general.launchd:
+    name: td-agent
+    state: started
+
+#- name: Tap Vector repo
+#  community.general.homebrew_tap:
+#    name: "vectordotdev/brew"
+
+#- name: Install Vector
+#  community.general.homebrew:
+#    name: vector
+#    state: present
+
+#- name: Create Vector config file
+#  ansible.builtin.template:
+#    src: vector.toml.j2
+#    dest: /opt/homebrew/etc/vector/vector.toml
+#    mode: '0640'
+#  register: vector_config
+#  become: true
+
+#- name: Start Vector
+#  command: /opt/homebrew/bin/brew services start vector
+
+#- name: Restart Vector (if config file changed, hacky)
+#  command: /opt/homebrew/bin/brew services start vector
+#  when: vector_config.changed
